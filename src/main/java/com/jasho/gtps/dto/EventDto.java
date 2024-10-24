@@ -8,15 +8,18 @@ import lombok.Setter;
 
 /**
  * @author Jashobanta Patra
- * crated on 13-08-2024
+ * crated on 24-10-2024
  */
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
-public class GroupDto {
-    private Long id;
-    private Long userId;
-    private String groupName;
+public class EventDto {
+    private Long eventId;
+    private String eventName;
+    private String createdBy;
+    private String createdDate;
+    private String updatedBy;
+    private String updatedDate;
 }
