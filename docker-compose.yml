@@ -1,0 +1,28 @@
+version: '4'
+services:
+  springboot-app:
+    image: gtps
+    #container_name: springboot-container
+    restart: on-failure
+    build: .
+    ports:
+      - '9030:8050'
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+
+  mysqldb:
+    image: mysql
+    ports:
+      - '3308:3306'
+    #restart: always
+    #container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: root
+
+
+
+
