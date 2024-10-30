@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script{
                      docker.withRegistry('https://index.docker.io/v1/', '2f864ba3-ecbf-4f17-a282-6f507da35854') {
-                        bat "docker compose up -d -build"
+                        bat "docker compose up -d --build"
                     }
                 }
             }
