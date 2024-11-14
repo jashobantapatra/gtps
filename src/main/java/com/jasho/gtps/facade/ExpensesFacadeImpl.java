@@ -32,4 +32,9 @@ public class ExpensesFacadeImpl implements ExpensesFacade {
         log.info("fetching expenses details...");
         return expensesService.fetchAllExpenses();
     }
+
+    @Override
+    public ExpensesDto fetchExpensesbyId(long id) {
+        return expensesService.fetchExpenseById(id);
+    }
 }

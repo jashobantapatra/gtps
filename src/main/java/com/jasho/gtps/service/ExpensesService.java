@@ -12,4 +12,6 @@ public interface ExpensesService {
     ExpensesDto saveExpenses(ExpensesDto expensesDto);
 
     List<ExpensesDto> fetchAllExpenses();
+
+    ExpensesDto fetchExpenseById(long id);
 }

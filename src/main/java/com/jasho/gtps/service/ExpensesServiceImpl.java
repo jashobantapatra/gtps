@@ -2,6 +2,7 @@ package com.jasho.gtps.service;
 
 import com.jasho.gtps.dto.ExpensesDto;
 import com.jasho.gtps.entity.ExpensesEntity;
+import com.jasho.gtps.exception.ResourceNotFoundException;
 import com.jasho.gtps.repository.ExpensesRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,5 +34,11 @@ public class ExpensesServiceImpl implements ExpensesService {
                 .stream()
                 .map(expensesEntity -> modelMapper.map(expensesEntity, ExpensesDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ExpensesDto fetchExpenseById(long id) {
+        ExpensesEntity expensesEntity = expensesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Expenses Not Found with ID: " + id));
+        return modelMapper.map(expensesEntity, ExpensesDto.class);
     }
 }

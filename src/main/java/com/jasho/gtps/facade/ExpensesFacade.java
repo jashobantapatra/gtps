@@ -12,4 +12,6 @@ public interface ExpensesFacade {
     ExpensesDto saveExpenses(ExpensesDto expensesDto);
 
     List<ExpensesDto> fetchAllExpenses();
+
+    ExpensesDto fetchExpensesbyId(long id);
 }
