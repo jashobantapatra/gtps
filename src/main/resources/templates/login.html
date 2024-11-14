@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: boots_trap}">
+    <meta charset="UTF-8">
+    <title>User Login</title>
+</head>
+<body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5">
+    <div th:replace="fragments :: nav_bar"></div>
+
+    <div class="row mt-4">
+        <div class="col-sm-8" th:if="${param.error}">
+            <p class="alert alert-danger alert-dismissible fade show" role="alert">Invalid username or password</p>
+        </div>
+
+        <div class="col-sm-8" th:if="${param.reset_success}">
+            <p class="alert alert-info alert-dismissible fade show" role="alert">You have successfully reset your
+                password, please log in here.</p>
+        </div>
+
+        <div class="col-sm-8" th:if="${param.verified}">
+            <p class="alert alert-info alert-dismissible fade show" role="alert">This account has already been verified,
+                please log in here.</p>
+        </div>
+        <div class="col-sm-8" th:if="${param.valid}">
+            <p class="alert alert-info alert-dismissible">Email verified successfully, please log in here.</p>
+        </div>
+
+        <!-- show logout warning alert when logged out. -->
+        <div class="col-sm-8" th:if="${param.logout}">
+            <p class="alert alert-warning">You have been logged out.</p>
+        </div>
+    </div>
+
+    <form class="px-4" method="post" th:action="@{/login}">
+        <h2 class="mb-4">User Login Form </h2>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label" for="email">Email</label>
+            <div class="col-sm-6">
+                <input autofocus="autofocus" class="form-control" id="email" name="email"
+                       required type="text">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label" for="password">Password</label>
+            <div class="col-sm-6">
+                <input autofocus="autofocus" class="form-control" id="password" name="password" required
+                       type="password">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-success" id="login" name="login" type="submit"> Login</button>
+            <span> Not registered yet? <a href="#" th:href="@{/registration/registration-form}">Register.</a> </span>
+            <div class="vr"></div>
+            <span><a href="/" th:href="@{registration/forgot-password-request}">Forgot password.</a> </span>
+        </div>
+    </form>
+</div>
+</body>
+</html>
