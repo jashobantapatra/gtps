@@ -2,7 +2,7 @@ server:
   port: 8050
 spring:
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/gtps
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/test
     username: ${MYSQL_USER:jasho}
     password: ${MYSQL_PASSWORD:password}
   mail:
