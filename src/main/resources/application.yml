@@ -5,10 +5,6 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/gtps
     username: ${MYSQL_USER:jasho}
     password: ${MYSQL_PASSWORD:password}
-  jpa:
-    hibernate:
-      ddl-auto: none
-      show-sql: true
   mail:
     host: smtp.gmail.com
     port: 587
