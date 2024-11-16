@@ -19,7 +19,7 @@ services:
     #restart: always
     #container_name: mysql-container
     environment:
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: gtps
       MYSQL_ROOT_PASSWORD: root
 
 

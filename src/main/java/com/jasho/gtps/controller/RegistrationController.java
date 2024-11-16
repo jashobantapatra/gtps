@@ -48,6 +48,9 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") RegistrationRequest registration,
                                HttpServletRequest request) {
+        if(userService.isEmailExist(registration.getEmail())){
+            return "redirect:/registration/registration-form?duplicateEmail";
+        }
         User user = userService.registerUser(registration);
         //publish the verification email event here
         publisher.publishEvent(new RegistrationCompleteEvent(user, UrlUtil.getApplicatiionUrl(request)));

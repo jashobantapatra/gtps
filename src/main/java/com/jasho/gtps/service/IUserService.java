@@ -22,4 +22,8 @@ public interface IUserService {
     void updateUser(Long id, String firstName, String lastName, String email);
 
     void deleteUser(Long id);
+
+    List<User> fetchUsersByIds(List<Long> ids);
+
+    boolean isEmailExist(String email);
 }

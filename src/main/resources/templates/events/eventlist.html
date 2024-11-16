@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: boots_trap}"></head>
+<body>
+
+
+<nav th:replace="fragments :: nav_bar"></nav>
+
+<div class="container py-3">
+    <h1 class="text-center my-4">List of Events</h1>
+
+    <a class="btn btn-primary mb-3" href="/events/create">Add Event</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Event Name</th>
+            <th scope="col">Event Description</th>
+            <th scope="col">Event Date</th>
+            <th scope="col">Members Tagged</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <tr th:each="eventEntity : ${events}">
+            <td th:text="${eventEntity.id}"></td>
+            <td th:text="${eventEntity.eventName}"></td>
+            <td th:text="${eventEntity.eventDescription}"></td>
+            <td th:text="${eventEntity.eventDate}"></td>
+            <td th:text="${#lists.size(eventEntity.members)}"></td>
+            <td style="white-space:nowrap">
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/events/users(id=${eventEntity.id})}">Add Members</a>
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/events/edit(id=${eventEntity.id})}">Edit</a>
+                <a class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure?')"
+                   th:href="@{/events/delete(id=${eventEntity.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<script crossorigin="anonymous"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

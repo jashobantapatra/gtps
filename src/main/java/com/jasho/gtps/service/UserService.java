@@ -66,4 +66,15 @@ public class UserService implements IUserService {
         theUser.ifPresent(user -> verificationTokenService.deleteUserToken(user.getId()));
         userRepository.deleteById(id);
     }
+
+    @Override
+    public List<User> fetchUsersByIds(List<Long> ids) {
+        return userRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        Optional<User> user = userRepository.isEmailExist(email);
+        return user.isPresent();
+    }
 }
