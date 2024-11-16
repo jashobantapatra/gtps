@@ -5,7 +5,6 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/gtps
     username: ${MYSQL_USER:jasho}
     password: ${MYSQL_PASSWORD:password}
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
