@@ -3,10 +3,10 @@
 <head th:replace="~{fragments :: boots_trap}"></head>
 <body>
 
-<nav th:replace="fragments :: nav_bar"></nav>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5">
+    <div th:replace="~{fragments :: nav_bar}"></div>
 
-<div class="container py-3">
-    <h1 class="text-center my-4">List of Members</h1>
+    <h2 class="m-4">All Members</h2>
 
 
     <!-- Form to handle multiple selection -->
@@ -36,11 +36,9 @@
         </table>
 
         <!-- Submit button for multiple selection -->
-        <div class="row">
-            <div class="offset-sm-4 col-sm-4 d-grid">
-                <button class="btn btn-success" type="submit">Submit</button>
-            </div>
-            <div class="col-sm-4 d-grid">
+        <div class="d-flex justify-content-start ms-8 mt-3">
+            <div>
+                <button class="btn btn-success me-2" type="submit">Submit</button>
                 <button class="btn btn-danger" href="/events">Cancel</button>
             </div>
         </div>

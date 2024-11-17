@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: boots_trap}">
     <meta charset="UTF-8">
     <title> Users</title>
 </head>
 <body>
 <div class="container col-md-offset-3 col-md-8 mt-lg-5">
-    <div th:replace="fragments :: nav_bar"></div>
+    <div th:replace="~{fragments :: nav_bar}"></div>
+
     <div class="row mt-2">
         <div class=" alert alert-info" th:if="${param.update_success}">
             A User has been updated successfully.
@@ -18,23 +19,29 @@
     <div th:switch="${users}">
         <h2 th:case="null">There are no users to display</h2>
         <div th:case="*">
-            <h2>All Users</h2>
-            <table class="table table-bordered table-hover">
+            <h2 class="m-4">All Users</h2>
+            <table class="table table-striped table-hover">
                 <thead>
                 <tr>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
                     <th scope="col">Email</th>
-                    <th colspan="2">Actions</th>
+                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="table-group-divider">
                 <tr th:each="user : ${users}">
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
-                    <td><a class="btn btn-info" href="#" th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a></td>
-                    <td><a class="btn btn-danger" th:href="@{/users/delete/{id}(id=${user.id})}">Delete</a></td>
+                    <td><a class="btn btn-success" data-bs-placement="top" data-bs-toggle="tooltip"
+                           href="#"
+                           th:href="@{/users/edit/{id}(id=${user.id})}"
+                           title="Edit"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger" data-bs-placement="top"
+                           data-bs-toggle="tooltip"
+                           th:href="@{/users/delete/{id}(id=${user.id})}"
+                           title="Delete"><i class="fas fa-trash"></i></a></td>
                 </tr>
                 </tbody>
             </table>

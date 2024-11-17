@@ -2,19 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments :: boots_trap}"></head>
 <body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5">
+    <div th:replace="~{fragments :: nav_bar}"></div>
 
+    <div class="row mt-2">
+        <div class=" alert alert-info" th:if="${param.create_success}">
+            Event has been created successfully.
+        </div>
+        <div class=" alert alert-info" th:if="${param.update_success}">
+            Event has been updated successfully.
+        </div>
+        <div class=" alert alert-danger" th:if="${param.delete_success}">
+            Event has been deleted successfully.
+        </div>
+    </div>
 
-<nav th:replace="fragments :: nav_bar"></nav>
+    <h2 class="m-4">All Events</h2>
 
-<div class="container py-3">
-    <h1 class="text-center my-4">List of Events</h1>
-
-    <a class="btn btn-primary mb-3" href="/events/create">Add Event</a>
-
-    <table class="table">
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Event Name</th>
             <th scope="col">Event Description</th>
             <th scope="col">Event Date</th>
@@ -24,23 +31,32 @@
         </thead>
         <tbody class="table-group-divider">
         <tr th:each="eventEntity : ${events}">
-            <td th:text="${eventEntity.id}"></td>
             <td th:text="${eventEntity.eventName}"></td>
             <td th:text="${eventEntity.eventDescription}"></td>
             <td th:text="${eventEntity.eventDate}"></td>
             <td th:text="${#lists.size(eventEntity.members)}"></td>
             <td style="white-space:nowrap">
-                <a class="btn btn-primary btn-sm"
-                   th:href="@{/events/users(id=${eventEntity.id})}">Add Members</a>
-                <a class="btn btn-primary btn-sm"
-                   th:href="@{/events/edit(id=${eventEntity.id})}">Edit</a>
-                <a class="btn btn-danger btn-sm"
+                <a class="btn btn-primary"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/events/users(id=${eventEntity.id})}"
+                   title="Add Members"><i class="fas fa-users"></i></a>
+                <a class="btn btn-success"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/events/edit(id=${eventEntity.id})}"
+                   title="Edit"><i class="fas fa-edit"></i></a>
+                <a class="btn btn-danger"
                    onclick="return confirm('Are you sure?')"
-                   th:href="@{/events/delete(id=${eventEntity.id})}">Delete</a>
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/events/delete(id=${eventEntity.id})}"
+                   title="Delete"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a class="btn btn-info" href="/events/create">Add Event</a>
 </div>
 
 
