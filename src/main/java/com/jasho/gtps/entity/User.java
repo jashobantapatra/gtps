@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
     @Id
@@ -42,9 +44,9 @@ public class User {
                     referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    public User(String firstName, String lstName, String email, String password, Collection<Role> roles) {
+    public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
         this.firstName = firstName;
-        this.lastName = lstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;

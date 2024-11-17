@@ -7,7 +7,6 @@ import com.jasho.gtps.entity.User;
 import com.jasho.gtps.service.EventMembersService;
 import com.jasho.gtps.service.EventService;
 import com.jasho.gtps.service.IUserService;
-import com.jasho.gtps.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,6 +60,15 @@ public class EventController {
     @PostMapping("/create")
     public String createEvent(@Validated @ModelAttribute EventDto eventDto, BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors()) {
+            return "events/create";
+        }
+
+        // Additional check to prevent saving empty records
+        if (eventDto.getEventName() == null || eventDto.getEventName().isEmpty()) {
+            return "events/create";
+        }
+
         EventEntity eventEntity = new EventEntity().builder()
                 .eventName(eventDto.getEventName())
                 .eventDescription(eventDto.getEventDescription())
@@ -71,7 +79,7 @@ public class EventController {
 
         eventService.saveEvent(eventEntity);
 
-        return "redirect:/events";
+        return "redirect:/events?create_success";
     }
 
     @GetMapping("/edit")
@@ -118,13 +126,13 @@ public class EventController {
 
         eventService.saveEvent(eventEntity);
 
-        return "redirect:/events";
+        return "redirect:/events?update_success";
     }
 
     @GetMapping("/delete")
     public String deleteEvent(@RequestParam int id) {
         eventService.deleteEvent(id);
-        return "redirect:/events";
+        return "redirect:/events?delete_success";
     }
 
     @GetMapping("/users")
