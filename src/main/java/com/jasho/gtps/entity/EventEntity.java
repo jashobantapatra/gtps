@@ -1,5 +1,6 @@
 package com.jasho.gtps.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -27,7 +27,6 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@ToString
 @Entity
 @Table(name = "event_table")
 public class EventEntity {
@@ -42,6 +41,7 @@ public class EventEntity {
     @Column(name = "event_date")
     private String eventDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "eventEntity", fetch = FetchType.LAZY)
     private List<EventMembersEntity> members;
 

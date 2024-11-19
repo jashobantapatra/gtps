@@ -1,6 +1,5 @@
 package com.jasho.gtps.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,37 +15,50 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * @author Jashobanta Patra
  * crated on 24-10-2024
  */
+
 @Entity
-@Table(name = "event_members", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "event_id"})
-})
+@Table(name = "expense")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 @ToString
-public class EventMembersEntity {
+public class ExpenseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private EventEntity event;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(nullable = false)
+    private BigDecimal amount;
+
+    @Column(name = "expense_date")
+    private LocalDate expenseDate;
+
+    @Column(nullable = false)
+    private String description;
+
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
+    private String updatedDate;
 
     @Column(name = "created_by")
     private long createdBy;
@@ -55,8 +66,5 @@ public class EventMembersEntity {
     @Column(name = "updated_by")
     private long updatedBy;
 
-    @JsonIgnore
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    @ManyToOne
-    private EventEntity eventEntity;
 }
+

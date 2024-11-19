@@ -64,7 +64,6 @@ public class EventController {
             return "events/create";
         }
 
-        // Additional check to prevent saving empty records
         if (eventDto.getEventName() == null || eventDto.getEventName().isEmpty()) {
             return "events/create";
         }
@@ -152,15 +151,12 @@ public class EventController {
     @PostMapping("/users")
     public String mapUsers(Model model, @ModelAttribute("event") EventEntity event) {
 
-        // Fetch the event entity if it's not fully populated
         EventEntity persistedEvent = eventService.fetchEventById(event.getId());
         log.info("persistedEvent : {}", persistedEvent);
 
-        // Fetch users based on selected IDs
         List<User> selectedUsers = userService.fetchUsersByIds(event.getSelectedMemberIds());
         log.info("selectedUsers : {}", selectedUsers);
 
-        // Map each selected user to a new EventMembersEntity
         List<EventMembersEntity> members = selectedUsers.stream().map(user -> {
             EventMembersEntity member = new EventMembersEntity();
             member.setUser(user);
@@ -171,7 +167,6 @@ public class EventController {
 
         log.info("members : {}", members);
 
-        // Save all members
         eventMembersService.saveAll(members);
 
         Long membersTaggedCount = members.stream().count();
@@ -182,6 +177,33 @@ public class EventController {
         log.info("membersTaggedCount : {}", membersTaggedCount);
 
         log.info("User mapping complete for event: {}", persistedEvent.getId());
-        return "redirect:/events";  // Redirect to the list of events
+        return "redirect:/events";
+    }
+
+    @GetMapping("/mappedUsers")
+    public String getMappedUser(Model model, @RequestParam("eventId") int eventId) {
+        log.info("Fetching Mapped Users for Event ID: {}", eventId);
+        EventEntity event = eventService.fetchEventById(eventId);
+
+        if (event == null) {
+            log.error("Event with ID {} not found!", eventId);
+            return "redirect:/events?error=event_not_found";
+        }
+
+        List<EventMembersEntity> members = event.getMembers();
+        log.info("Members for Event ID {}: {}", eventId, members);
+
+        if (members == null) {
+            members = List.of();
+        }
+
+        List<User> userEntityList = userService.getAllUsers();
+        log.info("Fetched Users: {}", userEntityList);
+
+        model.addAttribute("event", event);
+        model.addAttribute("users", userEntityList);
+        model.addAttribute("members", members);
+
+        return "events/mappedUserlist";
     }
 }
