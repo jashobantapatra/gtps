@@ -29,7 +29,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/error", "/registration/**").permitAll() // Allow public access to these
-                        .requestMatchers("/users", "/events/**").authenticated()  // Make sure /users is allowed for authenticated users
+                        .requestMatchers("/users", "/events/**", "/expenses/**").authenticated()  // Make sure /users is allowed for authenticated users
                         .anyRequest().authenticated() // Ensure other requests are secured
                 )
                 .formLogin(form -> form

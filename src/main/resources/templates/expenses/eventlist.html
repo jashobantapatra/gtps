@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: boots_trap}"></head>
+<body>
+<div class="container col-md-offset-3 col-md-8 mt-lg-5">
+    <div th:replace="~{fragments :: nav_bar}"></div>
+
+    <h2 class="m-4">All Events</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Event Name</th>
+            <th scope="col">Event Description</th>
+            <th scope="col">Event Date</th>
+            <th scope="col">Members Tagged</th>
+            <th scope="col">You spent</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <tr th:each="eventEntity : ${events}">
+            <td th:text="${eventEntity.eventName}"></td>
+            <td th:text="${eventEntity.eventDescription}"></td>
+            <td th:text="${eventEntity.eventDate}"></td>
+            <td th:text="${#lists.size(eventEntity.members)}"></td>
+            <td th:text="1000"></td>
+            <td style="white-space:nowrap">
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/expenses/expenseForm(eventId=${eventEntity.id})}">Add expenses</a>
+            </td>
+            <td style="white-space:nowrap">
+                <a class="btn btn-primary btn-sm"
+                   th:href="@{/events/mappedUsers(eventId=${eventEntity.id})}">Add expenses for All</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
