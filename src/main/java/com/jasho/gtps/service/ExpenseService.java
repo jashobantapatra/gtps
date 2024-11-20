@@ -2,6 +2,7 @@ package com.jasho.gtps.service;
 
 import com.jasho.gtps.entity.ExpenseEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,4 +17,11 @@ public interface ExpenseService {
     ExpenseEntity fetchExpenseById(long id);
 
     void saveAll(List<ExpenseEntity> expenseEntities);
+
+    BigDecimal getTotalExpenseByEventId(Long eventId);
+
+    List<ExpenseEntity> findExpensesByEventId(Long eventId);
+
+    //BigDecimal getTotalExpenseByEventIdUsingQuery(Long eventId);
+
 }

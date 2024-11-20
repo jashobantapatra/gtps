@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -42,4 +43,24 @@ public class ExpenseServiceImpl implements ExpenseService {
         log.info("saving all the expenses...");
         expenseRepository.saveAll(expenseEntities);
     }
+
+    @Override
+    public BigDecimal getTotalExpenseByEventId(Long eventId) {
+        return expenseRepository.findTotalAmountByEventId(eventId);
+    }
+
+    @Override
+    public List<ExpenseEntity> findExpensesByEventId(Long eventId) {
+        return expenseRepository.findExpensesByEventId(eventId);
+    }
+
+
+
+   /* @Override
+    public BigDecimal getTotalExpenseByEventIdUsingQuery(Long eventId) {
+        return expenseRepository.findByEventId(eventId).stream()
+                .map(ExpenseEntity::getAmount)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }*/
 }

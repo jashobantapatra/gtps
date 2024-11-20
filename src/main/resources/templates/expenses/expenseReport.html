@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: boots_trap}">
+    <title>User Expense Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <!-- Event Title -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="d-inline ms-4">Trip Name: <span class="text-primary" th:text="${event.eventName}"></span></h4>
+            <h4 class="d-inline ms-4">Total Trip Expenses: <span class="text-primary"
+                                                                 th:text="${totalTripExpenses}"></span></h4>
+            <h4 class="d-inline ms-4">Cost Per Head: <span
+                    class="text-primary"
+                    th:text="${totalTripExpenses} + '  / ' +${totalMembers} + ' = ' + ${costPerHead}"></span></h4>
+        </div>
+    </div>
+
+    <!-- User Expense Details -->
+    <div class="row">
+        <div class="col-12">
+            <h4 class="text-secondary">User Expense Details</h4>
+        </div>
+    </div>
+
+    <!-- Expense Table -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Date-Wise Expenses</th>
+                    <th scope="col">Amount Spent</th>
+                    <th scope="col">Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="userExpense : ${userExpenseSummaries}">
+                    <td class="fw-bold"
+                        th:text="${userExpense.user.firstName} + ' ' + ${userExpense.user.lastName}"></td>
+                    <td>
+                        <!-- Check if expensesByDate is not empty or null -->
+                        <div th:if="${userExpense.expensesByDate != null}">
+                            <!-- Iterate over the Map entries of expensesByDate -->
+                            <div th:each="entry : ${userExpense.expensesByDate}">
+                                <h6 class="text-muted fw-bold"
+                                    th:text="${#temporals.format(entry.key, 'dd-MM-yyyy')}"></h6>
+                                <ul class="list-unstyled ps-3">
+                                    <li th:each="expense : ${entry.value}">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-bold text-primary" th:text="${expense.description}"></span>
+                                            <span class="fw-bold text-primary" th:text="${expense.amount}"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- No expenses message -->
+                        <div th:if="${userExpense.expensesByDate == null or #maps.isEmpty(userExpense.expensesByDate)}">
+                            <p>No expenses recorded for this user.</p>
+                        </div>
+                    </td>
+                    <td class="fw-bold" th:text="${userExpense.totalAmount}"></td>
+                    <td>
+
+                        <!-- Color coding for positive or negative balance -->
+                        <span class="fw-bold"
+                              th:classappend="${userExpense.balance >= 0 ? 'text-success' : 'text-danger'}">
+                                <span th:text="${userExpense.balance}"></span>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Back to Events Button -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <a class="btn btn-primary" href="/events">
+                <i class="fas fa-arrow-left"></i> Back to Events
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

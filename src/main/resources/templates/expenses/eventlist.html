@@ -14,24 +14,43 @@
             <th scope="col">Event Description</th>
             <th scope="col">Event Date</th>
             <th scope="col">Members Tagged</th>
-            <th scope="col">You spent</th>
+            <th scope="col">Trip Expenses</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
-        <tr th:each="eventEntity : ${events}">
-            <td th:text="${eventEntity.eventName}"></td>
-            <td th:text="${eventEntity.eventDescription}"></td>
-            <td th:text="${eventEntity.eventDate}"></td>
-            <td th:text="${#lists.size(eventEntity.members)}"></td>
-            <td th:text="1000"></td>
+        <tr th:each="eventWithExpense : ${eventsWithExpenses}">
+            <td th:text="${eventWithExpense.event.eventName}"></td>
+            <td th:text="${eventWithExpense.event.eventDescription}"></td>
+            <td th:text="${eventWithExpense.event.eventDate}"></td>
+            <td th:text="${#lists.size(eventWithExpense.event.members)}"></td>
+            <td th:text="${eventWithExpense.totalExpense}"></td>
             <td style="white-space:nowrap">
-                <a class="btn btn-primary btn-sm"
-                   th:href="@{/expenses/expenseForm(eventId=${eventEntity.id})}">Add expenses</a>
+                <a class="btn btn-success"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/expenses/expenseForm(eventId=${eventWithExpense.event.id})}"
+                   title="Add expenses">
+                    <i class="fas fa-money-bill-wave"></i></a>
             </td>
             <td style="white-space:nowrap">
-                <a class="btn btn-primary btn-sm"
-                   th:href="@{/events/mappedUsers(eventId=${eventEntity.id})}">Add expenses for All</a>
+                <a class="btn btn-success"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/events/mappedUsers(eventId=${eventWithExpense.event.id})}"
+                   title="Add expenses for All">
+                    <i class="fas fa-money-bill-wave"></i>
+                </a>
+
+            </td>
+            <td style="white-space:nowrap">
+                <a class="btn btn-success"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   th:href="@{/expenses/eventUsers(eventId=${eventWithExpense.event.id})}"
+                   title="Report">
+                    <i class="fas fa-money-bill-wave"></i>
+                </a>
 
             </td>
         </tr>
