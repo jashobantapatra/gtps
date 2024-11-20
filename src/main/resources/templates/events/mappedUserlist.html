@@ -20,7 +20,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
-
+                <th scope="col">Expense Amount</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -28,9 +28,14 @@
                 <td th:text="${user.id}"></td>
                 <td th:text="@{${user.firstName} + ' ' + ${user.lastName}}"></td>
                 <td th:text="${user.email}"></td>
+                <td th:text="0"></td>
                 <td style="white-space:nowrap">
                     <a class="btn btn-primary btn-sm"
-                       th:href="@{/expenses/expenseForm(eventId=${event.id}, userId=${user.id})}">Add expenses</a>
+                       data-bs-placement="top"
+                       data-bs-toggle="tooltip"
+                       th:href="@{/expenses/expenseForm(eventId=${event.id}, userId=${user.id})}"
+                       title="Add Expenses">
+                        <i class="fas fa-money-bill-wave"></i></a>
 
                 </td>
             </tr>

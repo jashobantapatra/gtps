@@ -1,6 +1,8 @@
 package com.jasho.gtps.controller;
 
+import com.jasho.gtps.dto.EventWithExpense;
 import com.jasho.gtps.dto.ExpenseForm;
+import com.jasho.gtps.dto.ExpenseReportDto;
 import com.jasho.gtps.dto.ExpensesDto;
 import com.jasho.gtps.entity.EventEntity;
 import com.jasho.gtps.entity.ExpenseEntity;
@@ -18,10 +20,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Jashobanta Patra
@@ -46,8 +53,18 @@ public class ExpenseController {
 
     @GetMapping
     public String getEvent(Model model) {
+
         List<EventEntity> eventEntities = eventService.fetchAllEvent();
-        model.addAttribute("events", eventEntities);
+
+        List<EventWithExpense> eventsWithExpenses = eventEntities.stream()
+                .map(event -> {
+                    BigDecimal totalTripAmount = expenseService.getTotalExpenseByEventId(event.getId());
+                    return new EventWithExpense(event, totalTripAmount);
+                })
+                .collect(Collectors.toList());
+
+        model.addAttribute("eventsWithExpenses", eventsWithExpenses);
+
         return "expenses/eventlist";
     }
 
@@ -64,11 +81,19 @@ public class ExpenseController {
         model.addAttribute("userId", userId);
         model.addAttribute("expenseList", expenseList);
         model.addAttribute("newExpense", new ExpenseForm());
+
+        BigDecimal totalAmount = expenseList.stream()
+                .filter(expense -> expense.getAmount() != null)
+                .map(ExpenseForm::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("expenseList", expenseList);
+
         return "expenses/expenseForm";
     }
 
     @PostMapping("/addExpense")
-    public String addExpense(
+    public String addExpense(RedirectAttributes redirectAttributes,
             @ModelAttribute("newExpense") ExpenseForm newExpense,
             @RequestParam("eventId") Long eventId,
             @RequestParam("userId") Long userId) {
@@ -76,11 +101,20 @@ public class ExpenseController {
         newExpense.setEventId(eventId);
         newExpense.setUserId(userId);
         expenseList.add(newExpense);
+        BigDecimal totalAmount = expenseList.stream()
+                .filter(expense -> expense.getAmount() != null)
+                .map(ExpenseForm::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        log.info("totalAmount : {}", totalAmount);
+        redirectAttributes.addAttribute("eventId", eventId);
+        redirectAttributes.addAttribute("userId", userId);
+        redirectAttributes.addFlashAttribute("totalAmount", totalAmount);
+        //model.addAttribute("expenseList", expenseList);
         return "redirect:/expenses/expenseForm?eventId=" + eventId + "&userId=" + userId;
     }
 
     @PostMapping("/submitExpenses")
-    public String submitExpenses(@RequestParam("eventId") Long eventId, @RequestParam("userId") Long userId) {
+    public String submitExpenses(Model model, @RequestParam("eventId") Long eventId, @RequestParam("userId") Long userId) {
         log.info("Submitting expenses for event ID {} and user ID {}: {}", eventId, userId, expenseList);
 
         EventEntity event = eventService.fetchEventById(eventId);
@@ -106,6 +140,63 @@ public class ExpenseController {
                 .event(event)
                 .user(user)
                 .build();
+    }
+
+    @GetMapping("/eventUsers")
+    public String getEventUser(Model model, @RequestParam("eventId") Long eventId) {
+        log.info("Fetching Event Users for Event ID: {}", eventId);
+
+        EventEntity event = eventService.fetchEventById(eventId);
+        if (event == null) {
+            log.error("Event with ID {} not found!", eventId);
+            return "redirect:/events?error=event_not_found";
+        }
+
+        List<ExpenseEntity> expenseEntities = expenseService.findExpensesByEventId(eventId);
+        log.info("Expense details: {}", expenseEntities);
+
+        Map<User, List<ExpenseEntity>> userExpenses = expenseEntities.stream()
+                .collect(Collectors.groupingBy(ExpenseEntity::getUser));
+
+        BigDecimal totalTripExpenses = expenseEntities.stream()
+                .map(ExpenseEntity::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        int totalMembers = userExpenses.size();
+        BigDecimal costPerHead = totalTripExpenses.divide(new BigDecimal(totalMembers), 2, RoundingMode.HALF_UP);
+
+        List<ExpenseReportDto> userExpenseSummaries = userExpenses.entrySet().stream()
+                .map(entry -> {
+                    Map<LocalDate, List<ExpenseEntity>> expensesByDate = entry.getValue().stream()
+                            .collect(Collectors.groupingBy(expense -> expense.getExpenseDate()));
+
+                    BigDecimal totalAmount = entry.getValue().stream()
+                            .map(ExpenseEntity::getAmount)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum of BigDecimal amounts
+
+                    BigDecimal balance = costPerHead.subtract(totalAmount);
+
+                    return new ExpenseReportDto(
+                            entry.getKey(),
+                            expensesByDate,
+                            totalAmount,
+                            balance
+
+                    );
+                })
+                .toList();
+
+        log.info("Total Trip Expenses : {}", totalTripExpenses);
+        log.info("Total count : {}", totalMembers);
+        log.info("Per head cost : {}", costPerHead);
+
+        model.addAttribute("event", event);
+        model.addAttribute("userExpenseSummaries", userExpenseSummaries);
+        model.addAttribute("totalTripExpenses", totalTripExpenses);
+        model.addAttribute("totalMembers", totalMembers);
+        model.addAttribute("costPerHead", costPerHead);
+
+        return "expenses/expenseReport";
     }
 
 }

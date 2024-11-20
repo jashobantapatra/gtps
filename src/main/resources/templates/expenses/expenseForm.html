@@ -86,8 +86,16 @@
             </tbody>
         </table>
 
+        <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">Total Amount</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly th:value="${totalAmount}">
+            </div>
+        </div>
+
         <form method="post" th:action="@{/expenses/submitExpenses(eventId=${eventId}, userId=${userId})}">
-            <div class="d-flex justify-content-start ms-8 mt-3">
+
+        <div class="d-flex justify-content-start ms-8 mt-3">
                 <button class="btn btn-success me-2" type="submit">Submit</button>
             </div>
 
