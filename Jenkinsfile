@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Sonarqube Analysis') {
             steps {
-                bat ''' %SCANNER_HOME%/bin/sonar-scanner -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login=squ_7a0f1937e2c4c81598e00ee66300c17ca406bba3 -Dsonar.projectName=gtps \
+                bat ''' %SCANNER_HOME%/bin/sonar-scanner -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login=squ_496563dfbc66f9c3c7159fff505dc7e30dcc9bbe -Dsonar.projectName=gtps \
                 -Dsonar.java.binaries=. \
                 -Dsonar.projectKey=gtps '''
             }

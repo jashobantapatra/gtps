@@ -24,11 +24,11 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
+            <tr th:each="user, iter : ${users}">
+                <td th:text="${iter.index + 1}"></td>
                 <td th:text="@{${user.firstName} + ' ' + ${user.lastName}}"></td>
                 <td th:text="${user.email}"></td>
-                <td th:text="0"></td>
+                <td th:text="${userExpenseTotals[user.id] != null ? userExpenseTotals[user.id] : 0}"></td>
                 <td style="white-space:nowrap">
                     <a class="btn btn-primary btn-sm"
                        data-bs-placement="top"
