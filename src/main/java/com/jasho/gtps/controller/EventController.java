@@ -3,9 +3,11 @@ package com.jasho.gtps.controller;
 import com.jasho.gtps.dto.EventDto;
 import com.jasho.gtps.entity.EventEntity;
 import com.jasho.gtps.entity.EventMembersEntity;
+import com.jasho.gtps.entity.ExpenseEntity;
 import com.jasho.gtps.entity.User;
 import com.jasho.gtps.service.EventMembersService;
 import com.jasho.gtps.service.EventService;
+import com.jasho.gtps.service.ExpenseService;
 import com.jasho.gtps.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +46,9 @@ public class EventController {
 
     @Autowired
     private EventMembersService eventMembersService;
+
+    @Autowired
+    private ExpenseService expenseService;
 
     @GetMapping
     public String getEvent(Model model) {
@@ -181,7 +188,7 @@ public class EventController {
     }
 
     @GetMapping("/mappedUsers")
-    public String getMappedUser(Model model, @RequestParam("eventId") int eventId) {
+    public String getMappedUser(Model model, @RequestParam("eventId") Long eventId) {
         log.info("Fetching Mapped Users for Event ID: {}", eventId);
         EventEntity event = eventService.fetchEventById(eventId);
 
@@ -197,12 +204,26 @@ public class EventController {
             members = List.of();
         }
 
-        List<User> userEntityList = userService.getAllUsers();
-        log.info("Fetched Users: {}", userEntityList);
+        List<EventMembersEntity> finalMembers = members;
+        List<User> userEntityList = userService.getAllUsers().stream()
+                .filter(user -> finalMembers.stream()
+                        .anyMatch(member -> member.getUser().getId().equals(user.getId())))
+                .toList();
+
+        log.info("Mapped Users for Event ID {}: {}", eventId, userEntityList);
+
+        List<ExpenseEntity> expenseEntities = expenseService.findExpensesByEventId(eventId);
+
+        Map<Long, BigDecimal> userExpenseTotals = expenseEntities.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> expense.getUser().getId(),
+                        Collectors.mapping(ExpenseEntity::getAmount, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
+                ));
 
         model.addAttribute("event", event);
         model.addAttribute("users", userEntityList);
         model.addAttribute("members", members);
+        model.addAttribute("userExpenseTotals", userExpenseTotals);
 
         return "events/mappedUserlist";
     }

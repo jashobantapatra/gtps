@@ -22,6 +22,7 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th scope="col">#</th>
             <th scope="col">Event Name</th>
             <th scope="col">Event Description</th>
             <th scope="col">Event Date</th>
@@ -30,7 +31,8 @@
         </tr>
         </thead>
         <tbody class="table-group-divider">
-        <tr th:each="eventEntity : ${events}">
+        <tr th:each="eventEntity, iter : ${events}">
+            <td th:text="${iter.index + 1}"></td>
             <td th:text="${eventEntity.eventName}"></td>
             <td th:text="${eventEntity.eventDescription}"></td>
             <td th:text="${eventEntity.eventDate}"></td>

@@ -10,6 +10,7 @@
     <table class="table">
         <thead>
         <tr>
+            <th scope="col">#</th>
             <th scope="col">Event Name</th>
             <th scope="col">Event Description</th>
             <th scope="col">Event Date</th>
@@ -19,7 +20,8 @@
         </tr>
         </thead>
         <tbody class="table-group-divider">
-        <tr th:each="eventWithExpense : ${eventsWithExpenses}">
+        <tr th:each="eventWithExpense, iter : ${eventsWithExpenses}">
+            <td th:text="${iter.index + 1}"></td>
             <td th:text="${eventWithExpense.event.eventName}"></td>
             <td th:text="${eventWithExpense.event.eventDescription}"></td>
             <td th:text="${eventWithExpense.event.eventDate}"></td>

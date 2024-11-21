@@ -1,20 +1,20 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: boots_trap}">
-    <title>User Expense Report</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<head th:replace="~{fragments :: boots_trap}"></head>
 <body>
-<div class="container mt-4">
+<div class="container col-md-offset-3 col-md-8 mt-lg-5">
+    <div th:replace="~{fragments :: nav_bar}"></div>
+
+    <h3 class="mb-4">Trip Expenses Report</h3>
     <!-- Event Title -->
     <div class="row mb-4">
         <div class="col-12">
-            <h4 class="d-inline ms-4">Trip Name: <span class="text-primary" th:text="${event.eventName}"></span></h4>
-            <h4 class="d-inline ms-4">Total Trip Expenses: <span class="text-primary"
-                                                                 th:text="${totalTripExpenses}"></span></h4>
-            <h4 class="d-inline ms-4">Cost Per Head: <span
+            <h5 class="d-inline ms-4">Trip Name: <span class="text-primary" th:text="${event.eventName}"></span></h5>
+            <h5 class="d-inline ms-4">Total Trip Expenses: <span class="text-primary"
+                                                                 th:text="${totalTripExpenses}"></span></h5>
+            <h5 class="d-inline ms-4">Cost Per Head: <span
                     class="text-primary"
-                    th:text="${totalTripExpenses} + '  / ' +${totalMembers} + ' = ' + ${costPerHead}"></span></h4>
+                    th:text="${totalTripExpenses} + '  / ' + ${totalMembers} + ' = ' + ${costPerHead}"></span></h5>
         </div>
     </div>
 
@@ -31,6 +31,7 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-dark">
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">User</th>
                     <th scope="col">Date-Wise Expenses</th>
                     <th scope="col">Amount Spent</th>
@@ -38,7 +39,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="userExpense : ${userExpenseSummaries}">
+                <tr th:each="userExpense, iter : ${userExpenseSummaries}">
+                    <td th:text="${iter.index + 1}"></td>
                     <td class="fw-bold"
                         th:text="${userExpense.user.firstName} + ' ' + ${userExpense.user.lastName}"></td>
                     <td>
