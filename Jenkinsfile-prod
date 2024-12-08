@@ -28,7 +28,7 @@ pipeline {
                     ${SCANNER_HOME}/bin/sonar-scanner \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_3d0e8f41945337fd5c482e590cf242ae5b3a29e9 \
+                    -Dsonar.login=squ_33f9bd90ee5d8373a993b8e33fc3624711ce581a \
                     -Dsonar.projectName=gtps \
                     -Dsonar.java.binaries=. \
                     -Dsonar.projectKey=gtps
