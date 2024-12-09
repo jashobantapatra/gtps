@@ -50,7 +50,6 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/','fc1427a3-eca7-4816-bc83-93c5250b7635') {
-                        sh "docker compose -f ${DOCKER_COMPOSE_FILE} down"
                         sh "docker compose -f ${DOCKER_COMPOSE_FILE} up -d --build"
                     }
                 }
