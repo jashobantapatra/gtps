@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,5 +26,6 @@ public class ExpenseForm {
     private Long userId;     // User who incurred the expense
     private String description;
     private BigDecimal amount;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expenseDate;
 }

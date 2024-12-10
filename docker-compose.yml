@@ -14,8 +14,8 @@ services:
 
   mysqldb:
     image: mysql
-    volumes:
-      - E:/Projects/db:/var/lib/mysql
+    #volumes:
+     # - E:/Projects/db:/var/lib/mysql
     ports:
       - '3308:3306'
     #restart: always
