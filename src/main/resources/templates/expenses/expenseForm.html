@@ -38,7 +38,7 @@
         </div>
         <div class="d-flex justify-content-start ms-8 mt-3">
             <button class="btn btn-success me-2" type="submit">Add Expense</button>
-            <button class="btn btn-danger" onclick="window.location.href='/events'" type="button">Cancel</button>
+            <button class="btn btn-danger" onclick="window.location.href='/expenses'" type="button">Cancel</button>
         </div>
 
     </form>
@@ -71,17 +71,20 @@
                 <td th:text="${expense.expenseDate}"></td>
 
                 <td style="white-space:nowrap">
+                    <!-- Edit Button -->
                     <a class="btn btn-primary btn-sm"
-                       data-bs-placement="top"
-                       data-bs-toggle="tooltip"
-                       title="Edit"><i class="fas fa-edit"></i>
+                       th:href="@{/expenses/editExpense(index=${iter.index})}"
+                       data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
                     </a>
-                    <a class="btn btn-danger btn-sm"
-                       data-bs-placement="top"
-                       data-bs-toggle="tooltip"
 
+                    <!-- Delete Button -->
+                    <a class="btn btn-danger btn-sm"
+                       th:href="@{/expenses/deleteExpense(index=${iter.index}, eventId=${eventId}, userId=${userId})}"
                        onclick="return confirm('Are you sure?')"
-                       title="Delete"><i class="fas fa-trash"></i>
+                       data-bs-placement="top" data-bs-toggle="tooltip" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
                 </td>
             </tr>
             </tbody>

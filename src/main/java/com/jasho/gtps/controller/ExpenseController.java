@@ -199,4 +199,52 @@ public class ExpenseController {
         return "expenses/expenseReport";
     }
 
+    @GetMapping("/editExpense")
+    public String editExpense(@RequestParam("index") int index, Model model) {
+        if (index < 0 || index >= expenseList.size()) {
+            throw new IllegalArgumentException("Invalid expense index");
+        }
+        ExpenseForm expenseToEdit = expenseList.get(index);
+        log.info("expenseToEdit : {}", expenseToEdit);
+        model.addAttribute("editExpense", expenseToEdit);
+        model.addAttribute("index", index);
+        return "expenses/editExpenseForm";
+    }
+
+    @PostMapping("/updateExpense")
+    public String updateExpense(
+            @ModelAttribute("editExpense") ExpenseForm editExpense,
+            @RequestParam("index") int index,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("eventId") Long eventId,
+            @RequestParam("userId") Long userId) {
+        if (index < 0 || index >= expenseList.size()) {
+            throw new IllegalArgumentException("Invalid expense index");
+        }
+        editExpense.setEventId(eventId);
+        editExpense.setUserId(userId);
+        expenseList.set(index, editExpense);
+
+        redirectAttributes.addAttribute("eventId", eventId);
+        redirectAttributes.addAttribute("userId", userId);
+        return "redirect:/expenses/expenseForm?eventId=" + eventId + "&userId=" + userId;
+    }
+
+    @GetMapping("/deleteExpense")
+    public String deleteExpense(@RequestParam("index") int index,
+                                RedirectAttributes redirectAttributes,
+                                @RequestParam("eventId") Long eventId,
+                                @RequestParam("userId") Long userId) {
+        if (index < 0 || index >= expenseList.size()) {
+            throw new IllegalArgumentException("Invalid expense index");
+        }
+        expenseList.remove(index);
+
+        redirectAttributes.addAttribute("eventId", eventId);
+        redirectAttributes.addAttribute("userId", userId);
+        return "redirect:/expenses/expenseForm?eventId=" + eventId + "&userId=" + userId;
+        //return "redirect:/expenses/expenseForm";
+    }
+
+
 }
