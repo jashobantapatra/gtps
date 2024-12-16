@@ -42,7 +42,8 @@ pipeline {
         }
         stage('Build & Push Docker Image') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+                script {
+                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
                         sh '''
                             docker login -u jashobantapatra -p $dockerhubpwd
                             docker compose -f ${DOCKER_COMPOSE_FILE} build
