@@ -28,11 +28,17 @@ pipeline {
                     ${SCANNER_HOME}/bin/sonar-scanner \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=squ_f23b3e4e098a44f908be07ed9f3f1eaeb45b3aed \
+                    -Dsonar.login=squ_29b2ad4f91ac8e4c5c0b23273ef4cee5d04ef62a \
                     -Dsonar.projectName=gtps \
                     -Dsonar.java.binaries=. \
                     -Dsonar.projectKey=gtps
                 '''
+            }
+        }
+        stage('OWASP SCAN') {
+            steps {
+                dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DP'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
         stage('Build Application') {
