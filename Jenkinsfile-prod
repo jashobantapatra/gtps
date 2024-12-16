@@ -45,7 +45,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
                         sh '''
-                            docker login -u jashobantapatra -p $dockerhubpwd
+                            docker login -u jashobantapatra35 -p $dockerhubpwd
                             docker compose -f ${DOCKER_COMPOSE_FILE} build
                             docker compose -f ${DOCKER_COMPOSE_FILE} push
                         '''
